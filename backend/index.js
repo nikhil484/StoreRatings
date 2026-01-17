@@ -66,18 +66,10 @@ import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
 
-// Simple CORS configuration that actually works
+// CORS MUST be absolutely first
 app.use(cors({
-  origin: [
-    "https://store-ratings-delta.vercel.app",
-    "http://localhost:5173",
-    "http://localhost:3000"
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
+  origin: true, // Allow all origins temporarily to test
+  credentials: true
 }));
 
 app.use(express.json());
@@ -99,7 +91,7 @@ const startServer = async () => {
     await pool.query("SELECT 1");
     console.log("✅ MySQL connected successfully");
 
-    app.listen(PORT, () => {
+    app.listen(PORT, "0.0.0.0", () => { // Bind to 0.0.0.0 explicitly
       console.log(`🚀 Server running on port ${PORT}`);
     });
   } catch (error) {
