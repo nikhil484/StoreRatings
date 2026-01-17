@@ -11,21 +11,6 @@ import ratingRoutes from "./routes/rating.routes.js";
 import ownerRoutes from "./routes/owner.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 
-// const app = express();
-
-// app.use(
-//   cors({
-//     origin: [
-//       "https://store-ratings-delta.vercel.app",
-//       "http://localhost:5173",
-//       "http://localhost:3000",
-//     ],
-//     credentials: true,
-//   })
-// );
-
-// app.use(express.json());
-
 const app = express();
 
 app.use(cors({
@@ -34,16 +19,10 @@ app.use(cors({
     "http://localhost:5173",
     "http://localhost:3000",
   ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
 
-app.options("*", cors());
-
 app.use(express.json());
-
-
 
 app.use("/api/auth", authRoutes);
 app.use("/api/stores", storeRoutes);
