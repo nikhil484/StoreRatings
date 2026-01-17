@@ -22,16 +22,20 @@ const app = express();
 //   credentials: true,
 // }));
 
-app.use(cors({
+const corsOptions = {
   origin: [
     "https://store-ratings-delta.vercel.app",
     "http://localhost:5173",
     "http://localhost:3000",
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle preflight
 
 app.use(express.json());
 
