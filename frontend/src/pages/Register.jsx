@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import api from  "../services/api.js";
 const Register = () => {
   const navigate = useNavigate();
 
@@ -16,23 +16,20 @@ const Register = () => {
   const validate = () => {
     let newErrors = {};
 
-    // Name: 20–60 chars
+    
     if (formData.name.length < 20 || formData.name.length > 60) {
       newErrors.name = "Name must be between 20 and 60 characters";
     }
 
-    // Email: standard regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
 
-    // Address: max 400 chars
     if (formData.address.length > 400) {
       newErrors.address = "Address cannot exceed 400 characters";
     }
 
-    // Password: 8–16 chars, 1 uppercase, 1 special char
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
 
@@ -52,14 +49,20 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!validate()) return;
+  if (!validate()) return;
 
-    console.log("Form is valid:", formData);
-    // API call will be added next
-  };
+  try {
+    const res = await api.post("/auth/register", formData);
+    alert(res.data.message);
+    navigate("/login");
+  } catch (err) {
+    alert(err.response?.data?.message || "Registration failed");
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -74,7 +77,6 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
 
-          {/* Name */}
           <div>
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
@@ -89,7 +91,6 @@ const Register = () => {
             )}
           </div>
 
-          {/* Email */}
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
             <input
@@ -104,7 +105,6 @@ const Register = () => {
             )}
           </div>
 
-          {/* Address */}
           <div>
             <label className="block text-sm font-medium mb-1">Address</label>
             <textarea
@@ -119,7 +119,7 @@ const Register = () => {
             )}
           </div>
 
-          {/* Password */}
+
           <div>
             <label className="block text-sm font-medium mb-1">Password</label>
             <input
