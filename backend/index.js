@@ -14,7 +14,7 @@ const app = express();
 
 
 app.use(cors({
-  origin:"*",
+  origin:"https://store-ratings-delta.vercel.app"
 }));
 app.use(express.json());
 
