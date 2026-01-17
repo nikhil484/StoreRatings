@@ -4,6 +4,7 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import pool from "./config/db.js";
+
 import authRoutes from "./routes/auth.routes.js";
 import storeRoutes from "./routes/store.routes.js";
 import ratingRoutes from "./routes/rating.routes.js";
@@ -12,12 +13,7 @@ import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
 
-
-// app.use(cors({
-//   origin:"https://store-ratings-delta.vercel.app"
-// }));
-
-
+// ✅ CORS — THIS IS ENOUGH (NO app.options("*"))
 app.use(
   cors({
     origin: [
@@ -26,30 +22,23 @@ app.use(
       "http://localhost:3000",
     ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-
-app.options("*", cors());
-
 app.use(express.json());
 
-
+// routes
 app.use("/api/auth", authRoutes);
 app.use("/api/stores", storeRoutes);
 app.use("/api/ratings", ratingRoutes);
 app.use("/api/owner", ownerRoutes);
 app.use("/api/admin", adminRoutes);
 
-
 app.get("/", (req, res) => {
   res.send("StoreRatings API running");
 });
 
-const PORT = process.env.PORT || 5000;
-
+const PORT = process.env.PORT || 8080;
 
 const startServer = async () => {
   try {
@@ -60,7 +49,7 @@ const startServer = async () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
   } catch (error) {
-    console.error("❌ Failed to start server:", error.message);
+    console.error("❌ Failed to start server:", error);
   }
 };
 
