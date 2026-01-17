@@ -66,25 +66,18 @@ import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
 
-// Enable CORS for all routes - MUST BE BEFORE OTHER MIDDLEWARE
+// Simple CORS configuration that actually works
 app.use(cors({
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      "https://store-ratings-delta.vercel.app",
-      "http://localhost:5173",
-      "http://localhost:3000"
-    ];
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: [
+    "https://store-ratings-delta.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  exposedHeaders: ['Content-Range', 'X-Content-Range'],
-  maxAge: 600 // Cache preflight for 10 minutes
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
 
 app.use(express.json());
