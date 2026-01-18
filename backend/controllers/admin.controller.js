@@ -125,7 +125,7 @@ export const addStoreByAdmin = async (req, res) => {
  
     await pool.query(
       "INSERT INTO stores (name, address, owner_id) VALUES (?, ?, ?)",
-      [name, address, owner.id]
+      [name,ownerEmail, address, owner.id]
     );
 
     res.status(201).json({
