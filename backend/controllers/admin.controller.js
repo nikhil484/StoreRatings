@@ -83,7 +83,7 @@ export const getAdminUsers = async (req, res) => {
       WHERE
         (u.name LIKE ? OR u.email LIKE ? OR u.address LIKE ?)
         AND (? = "" OR u.role = ?)
-      GROUP BY u.id
+      GROUP BY u.id, u.name, u.email, u.address, u.role
       `,
       [
         `%${search}%`,
@@ -96,10 +96,11 @@ export const getAdminUsers = async (req, res) => {
 
     res.json(rows);
   } catch (err) {
-    console.error(err);
+    console.error("ADMIN USERS SQL ERROR:", err);
     res.status(500).json({ message: "Failed to fetch users" });
   }
 };
+
 
 export const getAdminStores = async (req, res) => {
   try {
