@@ -29,31 +29,57 @@ export const getAdminUsers = async (req, res) => {
   try {
     const { search = "", role = "" } = req.query;
 
-    const [rows] = await pool.query(
-      `
-      SELECT 
-        u.id,
-        u.name,
-        u.email,
-        u.address,
-        u.role,
-        ROUND(AVG(r.rating),1) AS store_rating
-      FROM users u
-      LEFT JOIN stores s ON u.id = s.owner_id
-      LEFT JOIN ratings r ON s.id = r.store_id
-      WHERE
-        (u.name LIKE ? OR u.email LIKE ? OR u.address LIKE ?)
-        AND (? = "" OR u.role = ?)
-      GROUP BY u.id
-      `,
-      [
-        `%${search}%`,
-        `%${search}%`,
-        `%${search}%`,
-        role,
-        role,
-      ]
-    );
+    // const [rows] = await pool.query(
+    //   `
+    //   SELECT 
+    //     u.id,
+    //     u.name,
+    //     u.email,
+    //     u.address,
+    //     u.role,
+    //     ROUND(AVG(r.rating),1) AS store_rating
+    //   FROM users u
+    //   LEFT JOIN stores s ON u.id = s.owner_id
+    //   LEFT JOIN ratings r ON s.id = r.store_id
+    //   WHERE
+    //     (u.name LIKE ? OR u.email LIKE ? OR u.address LIKE ?)
+    //     AND (? = "" OR u.role = ?)
+    //   GROUP BY u.id
+    //   `,
+    //   [
+    //     `%${search}%`,
+    //     `%${search}%`,
+    //     `%${search}%`,
+    //     role,
+    //     role,
+    //   ]
+    // );
+const [rows] = await pool.query(
+  `
+  SELECT 
+    u.id,
+    u.name,
+    u.email,
+    u.address,
+    u.role,
+    ROUND(AVG(r.rating), 1) AS store_rating
+  FROM users u
+  LEFT JOIN stores s ON u.id = s.owner_id
+  LEFT JOIN ratings r ON s.id = r.store_id
+  WHERE
+    (u.name LIKE ? OR u.email LIKE ? OR u.address LIKE ?)
+    AND (? = "" OR u.role = ?)
+  GROUP BY 
+    u.id, u.name, u.email, u.address, u.role
+  `,
+  [
+    `%${search}%`,
+    `%${search}%`,
+    `%${search}%`,
+    role,
+    role,
+  ]
+);
 
     res.json(rows);
   } catch {
