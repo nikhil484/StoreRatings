@@ -82,7 +82,7 @@ export const getAdminUsers = async (req, res) => {
       ) sr ON s.id = sr.store_id
       WHERE
         (u.name LIKE ? OR u.email LIKE ? OR u.address LIKE ?)
-        AND (? = "" OR u.role = ?)
+        AND (? = '' OR u.role = ?)
       GROUP BY
         u.id, u.name, u.email, u.address, u.role
       `,
