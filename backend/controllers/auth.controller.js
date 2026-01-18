@@ -7,32 +7,32 @@ export const register = async (req, res) => {
   try {
     const { name, email, address, password, role } = req.body;
 
-    // 1️⃣ Required fields check
+  
     if (!name || !email || !address || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // 2️⃣ Name validation (20–60 chars)
+ 
     if (name.length < 20 || name.length > 60) {
       return res
         .status(400)
         .json({ message: "Name must be between 20 and 60 characters" });
     }
 
-    // 3️⃣ Address validation (max 400 chars)
+    
     if (address.length > 400) {
       return res
         .status(400)
         .json({ message: "Address must not exceed 400 characters" });
     }
 
-    // 4️⃣ Email validation
+ 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: "Invalid email format" });
     }
 
-    // 5️⃣ Password validation (8–16, uppercase, special char)
+   
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
 
@@ -43,7 +43,6 @@ export const register = async (req, res) => {
       });
     }
 
-    // 6️⃣ Check if email already exists
     const [existingUser] = await pool.query(
       "SELECT id FROM users WHERE email = ?",
       [email]
@@ -53,13 +52,12 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: "Email already registered" });
     }
 
-    // 7️⃣ Hash password
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 8️⃣ Set role (Admin can pass role, public signup defaults)
+    
     const userRole = role || "NORMAL_USER";
 
-    // 9️⃣ Insert user
     await pool.query(
       `INSERT INTO users (name, email, address, password, role)
        VALUES (?, ?, ?, ?, ?)`,

@@ -2,44 +2,6 @@ import pool from "../config/db.js";
 
 
 
-
-// export const getAllStores = async (req, res) => {
-//   try {
-//     const { userId, search = "", sortBy = "name", order = "asc" } = req.query;
-
-//     const validSortFields = {
-//       name: "s.name",
-//       rating: "avg_rating",
-//     };
-
-//     const sortColumn = validSortFields[sortBy] || "s.name";
-//     const sortOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
-
-//     const [stores] = await pool.query(
-//       `
-//       SELECT 
-//         s.id,
-//         s.name,
-//         s.address,
-//         ROUND(AVG(r.rating), 1) AS avg_rating,
-//         ur.rating AS user_rating
-//       FROM stores s
-//       LEFT JOIN ratings r ON s.id = r.store_id
-//       LEFT JOIN ratings ur 
-//         ON s.id = ur.store_id AND ur.user_id = ?
-//       WHERE s.name LIKE ? OR s.address LIKE ?
-//       GROUP BY s.id
-//       ORDER BY ${sortColumn} ${sortOrder}
-//       `,
-//       [userId, `%${search}%`, `%${search}%`]
-//     );
-
-//     res.status(200).json(stores);
-//   } catch (error) {
-//     res.status(500).json({ message: "Failed to fetch stores" });
-//   }
-// };
-
 export const getAllStores = async (req, res) => {
   try {
     const { userId, search = "", sortBy = "name", order = "asc" } = req.query;

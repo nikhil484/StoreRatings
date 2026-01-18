@@ -75,7 +75,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Max-Age', '86400'); // 24 hours
   
-  // Handle OPTIONS preflight
+ 
   if (req.method === 'OPTIONS') {
     console.log('✅ Handling OPTIONS for:', req.path);
     return res.sendStatus(200);

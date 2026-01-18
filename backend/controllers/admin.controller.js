@@ -24,42 +24,6 @@ export const getAdminStats = async (req, res) => {
   }
 };
 
-
-// export const getAdminUsers = async (req, res) => {
-//   try {
-//     const { search = "", role = "" } = req.query;
-
-//     const [rows] = await pool.query(
-//       `
-//       SELECT 
-//         u.id,
-//         u.name,
-//         u.email,
-//         u.address,
-//         u.role,
-//         ROUND(AVG(r.rating),1) AS store_rating
-//       FROM users u
-//       LEFT JOIN stores s ON u.id = s.owner_id
-//       LEFT JOIN ratings r ON s.id = r.store_id
-//       WHERE
-//         (u.name LIKE ? OR u.email LIKE ? OR u.address LIKE ?)
-//         AND (? = "" OR u.role = ?)
-//       GROUP BY u.id
-//       `,
-//       [
-//         `%${search}%`,
-//         `%${search}%`,
-//         `%${search}%`,
-//         role,
-//         role,
-//       ]
-//     );
-
-//     res.json(rows);
-//   } catch {
-//     res.status(500).json({ message: "Failed to fetch users" });
-//   }
-// };
 export const getAdminUsers = async (req, res) => {
   try {
     const { search = "", role = "" } = req.query;
@@ -103,7 +67,6 @@ export const getAdminUsers = async (req, res) => {
 };
 
 
-
 export const getAdminStores = async (req, res) => {
   try {
     const { search = "" } = req.query;
@@ -131,7 +94,6 @@ export const getAdminStores = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch stores" });
   }
 };
-
 
 
 export const addStoreByAdmin = async (req, res) => {
